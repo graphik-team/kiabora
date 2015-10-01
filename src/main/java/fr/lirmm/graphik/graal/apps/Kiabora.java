@@ -461,7 +461,8 @@ public class Kiabora {
 	           description = "Print the rule set (can be usefull if some rules were not labelled in the input file).")
 	private boolean print_ruleset = false;
 
-	@Parameter(names = { "-P", "--rule-properties" }, description = "")
+	@Parameter(names = { "-P", "--rule-properties" }, 
+	           description = "Print properties for each rule.")
 	private boolean print_rule_pties = false;
 
 	@Parameter(names = { "-S", "--scc-properties" },
