@@ -5,20 +5,20 @@
 	<groupId>fr.lirmm.graphik</groupId>
 	<artifactId>kiabora</artifactId>
 	<name>fr.lirmm.graphik:kiabora</name>
-        <version>1.0.beta1</version>
+	<version>1.0.beta2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-        <url>http://graphik-team.github.io/graal/kiabora</url>
+	<url>http://graphik-team.github.io/graal/kiabora</url>
 
 	<properties>
-                <graal.version>0.9.0</graal.version>
+		<graal.version>1.0.0</graal.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 	</properties>
 
-        <scm>
-          <url>https://github.com/graphik-team/kiabora</url>
-          <developerConnection>scm:git:git@github.com:graphik-team/kiabora.git</developerConnection>
+	<scm>
+		<url>https://github.com/graphik-team/kiabora</url>
+		<developerConnection>scm:git:git@github.com:graphik-team/kiabora.git</developerConnection>
 	</scm>
 
 	<inceptionYear>2014</inceptionYear>
@@ -45,6 +45,11 @@
 		<dependency>
 			<groupId>fr.lirmm.graphik</groupId>
 			<artifactId>graal-util</artifactId>
+			<version>${graal.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.lirmm.graphik</groupId>
+			<artifactId>graal-api</artifactId>
 			<version>${graal.version}</version>
 		</dependency>
 		<dependency>
