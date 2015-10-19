@@ -5,7 +5,7 @@
 	<groupId>fr.lirmm.graphik</groupId>
 	<artifactId>kiabora</artifactId>
 	<name>fr.lirmm.graphik:kiabora</name>
-	<version>1.0.beta3-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<url>http://graphik-team.github.io/graal/kiabora</url>
