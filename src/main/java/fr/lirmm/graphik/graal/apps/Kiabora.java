@@ -29,9 +29,9 @@ import fr.lirmm.graphik.graal.rulesetanalyser.property.FUSProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.FrontierGuardedProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.FrontierOneProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.GBTSProperty;
+import fr.lirmm.graphik.graal.rulesetanalyser.property.LinearProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.MFAProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.MSAProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.LinearProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.RangeRestrictedProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.RuleSetProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.StickyProperty;
@@ -89,6 +89,11 @@ public class Kiabora {
 		}
 
 		initPropertyMap();
+
+		if (options.list_properties) {
+			printPropertiesList(propertyMap);
+			System.exit(0);
+		}
 
 		// init parser
 		DlgpParser parser = null;
@@ -412,6 +417,12 @@ public class Kiabora {
 		System.out.println(out);
 	}
 
+	public static void printPropertiesList(Map<String, RuleSetProperty> properties) {
+		for (RuleSetProperty p : properties.values()) {
+			System.out.println(p.getLabel());
+		}
+	}
+
 	/**
 	 * Prepare the list of rule set properties.
 	 * If you have implemented a new rule set property, and you want
@@ -448,6 +459,10 @@ public class Kiabora {
 	           description = "Select which properties must be checked (use '*' to select all).",
 	           variableArity = true)
 	private List<String> ruleset_properties = new LinkedList<String>();
+
+	@Parameter(names = { "-l", "--list-properties" }, 
+			   description = "List valide property names")
+	private boolean list_properties = false;
 
 	@Parameter(names = { "-g", "--grd" },
 	           description = "Print the Graph of Rule Dependencies.")
