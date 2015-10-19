@@ -29,6 +29,8 @@ import fr.lirmm.graphik.graal.rulesetanalyser.property.FUSProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.FrontierGuardedProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.FrontierOneProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.GBTSProperty;
+import fr.lirmm.graphik.graal.rulesetanalyser.property.MFAProperty;
+import fr.lirmm.graphik.graal.rulesetanalyser.property.MSAProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.LinearProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.RangeRestrictedProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.RuleSetProperty;
@@ -428,6 +430,8 @@ public class Kiabora {
 		propertyMap.put("fus",  FUSProperty.instance());
 		propertyMap.put("gbts", GBTSProperty.instance());
 		propertyMap.put("lin",  LinearProperty.instance());
+		propertyMap.put("mfa",  MFAProperty.instance());
+		propertyMap.put("msa",  MSAProperty.instance());
 		propertyMap.put("rr",   RangeRestrictedProperty.instance());
 		propertyMap.put("s",    StickyProperty.instance());
 		propertyMap.put("wa",   WeaklyAcyclicProperty.instance());
