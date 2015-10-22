@@ -79,6 +79,8 @@ public class Kiabora {
 		}
 
 		if (options.help) {
+			Apps.printVersion(PROGRAM_NAME);
+			System.out.println("For more details about Kiabora: see http://graphik-team.github.io/graal/kiabora");
 			commander.usage();
 			System.exit(0);
 		}
@@ -419,7 +421,7 @@ public class Kiabora {
 
 	public static void printPropertiesList(Map<String, RuleSetProperty> properties) {
 		for (RuleSetProperty p : properties.values()) {
-			System.out.println(p.getLabel());
+			System.out.println(p.getLabel() + ": \t" + p.getDescription());
 		}
 	}
 
@@ -461,7 +463,7 @@ public class Kiabora {
 	private List<String> ruleset_properties = new LinkedList<String>();
 
 	@Parameter(names = { "-l", "--list-properties" }, 
-			   description = "List valide property names")
+			   description = "Print the available rule set properties.")
 	private boolean list_properties = false;
 
 	@Parameter(names = { "-g", "--grd" },
