@@ -421,7 +421,7 @@ public class Kiabora {
 
 	public static void printPropertiesList(Map<String, RuleSetProperty> properties) {
 		for (RuleSetProperty p : properties.values()) {
-			System.out.println(p.getLabel() + ": \t" + p.getDescription());
+			System.out.println(p.getLabel() + ": \t" + p.getFullName() + " - " + p.getDescription());
 		}
 	}
 
@@ -433,24 +433,28 @@ public class Kiabora {
 	 * compile, and everything will (should) work!
 	 */
 	public static void initPropertyMap() {
-		propertyMap.put("agrd", AGRDProperty.instance());
-		propertyMap.put("bts",  BTSProperty.instance());
-		propertyMap.put("disc", DisconnectedProperty.instance());
-		propertyMap.put("dr",   DomainRestrictedProperty.instance());
-		propertyMap.put("fes",  FESProperty.instance());
-		propertyMap.put("fg",   FrontierGuardedProperty.instance());
-		propertyMap.put("fr1",  FrontierOneProperty.instance());
-		propertyMap.put("fus",  FUSProperty.instance());
-		propertyMap.put("gbts", GBTSProperty.instance());
-		propertyMap.put("lin",  LinearProperty.instance());
-		propertyMap.put("mfa",  MFAProperty.instance());
-		propertyMap.put("msa",  MSAProperty.instance());
-		propertyMap.put("rr",   RangeRestrictedProperty.instance());
-		propertyMap.put("s",    StickyProperty.instance());
-		propertyMap.put("wa",   WeaklyAcyclicProperty.instance());
-		propertyMap.put("wfg",  WeaklyFrontierGuardedSetProperty.instance());
-		propertyMap.put("wg",   WeaklyGuardedSetProperty.instance());
-		propertyMap.put("ws",   WeaklyStickyProperty.instance());
+		addToPropertyMap(AGRDProperty.instance());
+		addToPropertyMap(BTSProperty.instance());
+		addToPropertyMap(DisconnectedProperty.instance());
+		addToPropertyMap(DomainRestrictedProperty.instance());
+		addToPropertyMap(FESProperty.instance());
+		addToPropertyMap(FrontierGuardedProperty.instance());
+		addToPropertyMap(FrontierOneProperty.instance());
+		addToPropertyMap(FUSProperty.instance());
+		addToPropertyMap(GBTSProperty.instance());
+		addToPropertyMap(LinearProperty.instance());
+		addToPropertyMap(MFAProperty.instance());
+		addToPropertyMap(MSAProperty.instance());
+		addToPropertyMap(RangeRestrictedProperty.instance());
+		addToPropertyMap(StickyProperty.instance());
+		addToPropertyMap(WeaklyAcyclicProperty.instance());
+		addToPropertyMap(WeaklyFrontierGuardedSetProperty.instance());
+		addToPropertyMap(WeaklyGuardedSetProperty.instance());
+		addToPropertyMap(WeaklyStickyProperty.instance());
+	}
+
+	private static void addToPropertyMap(RuleSetProperty p) {
+		propertyMap.put(p.getLabel(), p);
 	}
 
 	@Parameter(names = { "-f", "--input-file" },
@@ -458,7 +462,8 @@ public class Kiabora {
 	private String input_filepath = "-";
 
 	@Parameter(names = { "-p", "--properties" },
-	           description = "Select which properties must be checked (use '*' to select all).",
+	           description = "Select which properties must be checked (example: 'lin,agrd,s,fus' or '*' to select all)."
+	             + " See --list-properties for a list of available properties.",
 	           variableArity = true)
 	private List<String> ruleset_properties = new LinkedList<String>();
 
@@ -495,11 +500,11 @@ public class Kiabora {
 	private boolean print_pties = false;
 
 	@Parameter(names = { "-c", "--combine-fes" },
-	           description = "Combine GRD connected components in attempt to find some decidable combination while maximising the forward chaining (chase).")
+	           description = "Combine GRD connected components in attempt to find some decidable combination while maximizing the forward chaining (chase).")
 	private boolean combine_fes = false;
 
 	@Parameter(names = { "-b", "--combine-fus" },
-	           description = "Combine GRD connected components in attempt to find some decidable combination while maximising the backward chaining (query reformulation).")
+	           description = "Combine GRD connected components in attempt to find some decidable combination while maximizing the backward chaining (query rewriting).")
 	private boolean combine_fus = false;
 
 	@Parameter(names = { "-u", "--unifiers" },

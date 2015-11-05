@@ -11,7 +11,7 @@
 	<url>http://graphik-team.github.io/graal/kiabora</url>
 
 	<properties>
-		<graal.version>1.0.1</graal.version>
+		<graal.version>1.0.2</graal.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 	</properties>
