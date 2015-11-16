@@ -5,13 +5,13 @@
 	<groupId>fr.lirmm.graphik</groupId>
 	<artifactId>kiabora</artifactId>
 	<name>fr.lirmm.graphik:kiabora</name>
-	<version>1.1.2-SNAPSHOT</version>
+	<version>1.1.2</version>
 	<packaging>jar</packaging>
 
 	<url>http://graphik-team.github.io/graal/kiabora</url>
 
 	<properties>
-		<graal.version>1.0.2</graal.version>
+		<graal.version>1.0.3</graal.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 	</properties>
