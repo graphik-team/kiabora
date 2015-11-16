@@ -43,19 +43,21 @@ import fr.lirmm.graphik.graal.rulesetanalyser.util.AnalyserRuleSet;
 import fr.lirmm.graphik.util.Apps;
 import fr.lirmm.graphik.util.graph.scc.StronglyConnectedComponentsGraph;
 
+/*
+ * What remains:
+ *   - first, we should implement some tests to check if everything
+ *   works correctly;
+ *   - second, we should implement another main that will do
+ *   conversions that old kiabora (may it rest in peace) did; => DONE
+ *   - finally, upgrade the servlet so it calls this program.
+ */
+
 /**
  * Analyse a rule set.
  * 
  * The input file must be DLGP formatted.
  * 
  * For details about the various arguments use '--help'.
- * 
- * What remains:
- *   - first, we should implement some tests to check if everything
- *   works correctly;
- *   - second, we should implement another main that will do
- *   conversions that old kiabora (may it rest in peace) did;
- *   - finally, upgrade the servlet so it calls this program.
  */
 public class Kiabora {
 
@@ -479,7 +481,7 @@ public class Kiabora {
 	private boolean print_sccg = false;
 
 	@Parameter(names = { "-r", "--rule-set" },
-	           description = "Print the rule set (can be usefull if some rules were not labelled in the input file).")
+	           description = "Print the rule set (can be useful if some rules were not labelled in the input file).")
 	private boolean print_ruleset = false;
 
 	@Parameter(names = { "-P", "--rule-properties" }, 
