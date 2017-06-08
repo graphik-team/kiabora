@@ -105,8 +105,9 @@ public class Kiabora {
 		if (options.input_filepath.equals("-"))
 			parser = new DlgpParser(System.in);
 		else {
-			try { parser = new DlgpParser(new FileInputStream(options.input_filepath)); }
-			catch (Exception e) {
+			try {
+				parser = new DlgpParser(new FileInputStream(options.input_filepath));
+			} catch (Exception e) {
 				System.err.println("Could not open file: " + options.input_filepath);
 				System.err.println(e);
 				e.printStackTrace();
@@ -131,13 +132,13 @@ public class Kiabora {
 			ruleset.enableUnifiers(true);
 
 		// set up analyser
-		Map<String,RuleSetProperty> properties = new TreeMap<String,RuleSetProperty>();
+		Map<String, RuleSetProperty> properties = new TreeMap<String, RuleSetProperty>();
 		for (String label : options.ruleset_properties) {
 			if (label.equals("*"))
 				properties.putAll(propertyMap);
 			else {
 				if (propertyMap.get(label) != null)
-					properties.put(label,propertyMap.get(label));
+					properties.put(label, propertyMap.get(label));
 				else if (LOGGER.isWarnEnabled())
 					LOGGER.warn("Requesting unknown property: " + label);
 			}
@@ -223,8 +224,11 @@ public class Kiabora {
 			out.append("C" + v + " = {");
 			first = true;
 			for (Rule r : scc.getComponent(v)) {
-				if (first) first = false;
-				else out.append(", ");
+				if (first) {
+					first = false;
+				} else {
+					out.append(", ");
+				}
 				out.append(r.getLabel());
 			}
 			out.append("}\n");
@@ -243,9 +247,9 @@ public class Kiabora {
 				if (first) {
 					first = false;
 					out.append(" ---> ");
-				}
-				else out.append(", ");
-				out.append("C"+scc.getEdgeTarget(t));
+				} else
+					out.append(", ");
+				out.append("C" + scc.getEdgeTarget(t));
 			}
 			out.append("\n");
 		}
@@ -302,12 +306,12 @@ public class Kiabora {
 		Map<String, Integer> pties = analyser.ruleSetProperties();
 
 		out.append("+");
-		out.append(StringUtils.center("", (cell_size+1)*pties.entrySet().size()-1, '-'));
+		out.append(StringUtils.center("", (cell_size + 1) * pties.entrySet().size() - 1, '-'));
 		out.append("+");
 		out.append("\n");
 		for (Map.Entry<String, Integer> e : pties.entrySet()) {
 			out.append("|");
-			if (e.getValue() == 0) 
+			if (e.getValue() == 0)
 				out.append(StringUtils.center("?", cell_size));
 			else if (e.getValue() < 0)
 				out.append(StringUtils.center("-", cell_size));
@@ -316,7 +320,7 @@ public class Kiabora {
 		}
 		out.append("|\n");
 		out.append("+");
-		out.append(StringUtils.center("", (cell_size+1)*pties.entrySet().size()-1, '-'));
+		out.append(StringUtils.center("", (cell_size + 1) * pties.entrySet().size() - 1, '-'));
 		out.append("+\n");
 		for (Map.Entry<String, Integer> e : pties.entrySet()) {
 			out.append("|");
@@ -324,7 +328,7 @@ public class Kiabora {
 		}
 		out.append("|\n");
 		out.append("+");
-		out.append(StringUtils.center("", (cell_size+1)*pties.entrySet().size()-1, '-'));
+		out.append(StringUtils.center("", (cell_size + 1) * pties.entrySet().size() - 1, '-'));
 		out.append("+");
 		System.out.println(out);
 	}
@@ -332,20 +336,21 @@ public class Kiabora {
 	public static void printSCCProperties(Analyser analyser) {
 		int cell_size = 6;
 		StringBuilder out = new StringBuilder();
-		Map<String,Integer> basePties = analyser.sccProperties().iterator().next();
+		Map<String, Integer> basePties = analyser.sccProperties().iterator().next();
 
 		int cIndex = 0;
-		if (basePties == null) return;
+		if (basePties == null)
+			return;
 
 		out.append("+");
-		out.append(StringUtils.center("", (cell_size+1)*basePties.entrySet().size()-1, '-'));
+		out.append(StringUtils.center("", (cell_size + 1) * basePties.entrySet().size() - 1, '-'));
 		out.append("+");
 		out.append("\n");
 
-		for (Map<String,Integer> pties : analyser.sccProperties()) {
+		for (Map<String, Integer> pties : analyser.sccProperties()) {
 			for (Map.Entry<String, Integer> e : pties.entrySet()) {
 				out.append("|");
-				if (e.getValue() == 0) 
+				if (e.getValue() == 0)
 					out.append(StringUtils.center("?", cell_size));
 				else if (e.getValue() < 0)
 					out.append(StringUtils.center("-", cell_size));
@@ -353,12 +358,12 @@ public class Kiabora {
 					out.append(StringUtils.center("X", cell_size));
 			}
 			out.append("|");
-			out.append(StringUtils.center("C"+cIndex++,cell_size));
+			out.append(StringUtils.center("C" + cIndex++, cell_size));
 			out.append("\n");
 		}
 
 		out.append("+");
-		out.append(StringUtils.center("", (cell_size+1)*basePties.entrySet().size()-1, '-'));
+		out.append(StringUtils.center("", (cell_size + 1) * basePties.entrySet().size() - 1, '-'));
 		out.append("+\n");
 		for (Map.Entry<String, Integer> e : basePties.entrySet()) {
 			out.append("|");
@@ -366,7 +371,7 @@ public class Kiabora {
 		}
 		out.append("|\n");
 		out.append("+");
-		out.append(StringUtils.center("", (cell_size+1)*basePties.entrySet().size()-1, '-'));
+		out.append(StringUtils.center("", (cell_size + 1) * basePties.entrySet().size() - 1, '-'));
 		out.append("+");
 
 		System.out.println(out);
@@ -380,7 +385,7 @@ public class Kiabora {
 		}
 
 		StringBuilder out = new StringBuilder();
-		for (int i = 0 ; i < combine.length ; ++i) {
+		for (int i = 0; i < combine.length; ++i) {
 			out.append("C" + i + ": ");
 			if ((combine[i] & Analyser.COMBINE_FES) != 0)
 				out.append("FES");
@@ -402,7 +407,7 @@ public class Kiabora {
 		}
 
 		StringBuilder out = new StringBuilder();
-		for (int i = 0 ; i < combine.length ; ++i) {
+		for (int i = 0; i < combine.length; ++i) {
 			out.append("C" + i + ": ");
 			if ((combine[i] & Analyser.COMBINE_FES) != 0)
 				out.append("FES");
