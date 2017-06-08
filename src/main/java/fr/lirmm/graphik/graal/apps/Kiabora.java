@@ -209,6 +209,15 @@ public class Kiabora {
 			printSCCProperties(analyser);
 			System.out.println("");
 		}
+		
+		System.out.print("===== ANALYSIS: ");
+		if(analyser.isDecidable()) {
+			System.out.println("DECIDABLE =====");
+		} else {
+			System.out.println("no proof of decidability found =====");
+		}
+		System.out.println("");
+
 
 		if (options.combine_fes) {
 			System.out.println("=== COMBINE (FES) ====");
