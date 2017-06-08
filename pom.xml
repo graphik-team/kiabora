@@ -103,24 +103,36 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4.1</version>
-				<configuration>
-					<preparationGoals>compile</preparationGoals>
-					<finalName>Kiabora-${project.version}</finalName>
-					<archive>
-						<manifestEntries>
-							<Built-On>${maven.build.timestamp}</Built-On>
-						</manifestEntries>
-						<manifest>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<mainClass>fr.lirmm.graphik.graal.apps.Kiabora</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<!-- Run shade goal on package phase -->
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<!-- add Main-Class to manifest file -->
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>fr.lirmm.graphik.graal.apps.Kiabora</mainClass>
+									<manifestEntries>
+										<Built-On>${maven.build.timestamp}</Built-On>
+										<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+										<Specification-Title>${project.name}</Specification-Title>
+										<Specification-Version>${project.version}</Specification-Version>
+										<Graal-version>${graal.version}</Graal-version>
+										<JDK-Target-Version>${jdk.version}</JDK-Target-Version>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+							<minimizeJar>true</minimizeJar>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
