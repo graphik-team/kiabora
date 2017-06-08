@@ -1,6 +1,8 @@
 package fr.lirmm.graphik.graal.apps;
 
 import java.io.FileInputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jgrapht.graph.DefaultEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,29 +18,17 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import fr.lirmm.graphik.graal.api.core.Rule;
+import fr.lirmm.graphik.graal.api.core.RuleSetException;
+import fr.lirmm.graphik.graal.core.stream.filter.RuleFilterIterator;
+import fr.lirmm.graphik.graal.core.unifier.checker.ProductivityChecker;
+import fr.lirmm.graphik.graal.core.unifier.checker.RestrictedProductivityChecker;
 import fr.lirmm.graphik.graal.io.dlp.DlgpParser;
 import fr.lirmm.graphik.graal.io.dlp.DlgpWriter;
 import fr.lirmm.graphik.graal.rulesetanalyser.Analyser;
 import fr.lirmm.graphik.graal.rulesetanalyser.RuleSetPropertyHierarchy;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.AGRDProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.BTSProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.DisconnectedProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.DomainRestrictedProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.FESProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.FUSProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.FrontierGuardedProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.FrontierOneProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.GBTSProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.LinearProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.MFAProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.MSAProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.RangeRestrictedProperty;
+import fr.lirmm.graphik.graal.rulesetanalyser.graph.GraphPositionDependencies;
+import fr.lirmm.graphik.graal.rulesetanalyser.graph.GraphPositionDependencies.SpecialEdge;
 import fr.lirmm.graphik.graal.rulesetanalyser.property.RuleSetProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.StickyProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.WeaklyAcyclicProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.WeaklyFrontierGuardedSetProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.WeaklyGuardedSetProperty;
-import fr.lirmm.graphik.graal.rulesetanalyser.property.WeaklyStickyProperty;
 import fr.lirmm.graphik.graal.rulesetanalyser.util.AnalyserRuleSet;
 import fr.lirmm.graphik.util.Apps;
 import fr.lirmm.graphik.util.graph.scc.StronglyConnectedComponentsGraph;
@@ -63,10 +54,7 @@ public class Kiabora {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Kiabora.class);
 
 	public static final String PROGRAM_NAME = "kiabora";
-	public static final Map<String,RuleSetProperty> propertyMap =
-		new TreeMap<String,RuleSetProperty>();
-
-	private static long currentRuleID = 0;
+	public static final Map<String, RuleSetProperty> propertyMap = RuleSetPropertyHierarchy.generatePropertyMap();
 
 	public static void main(String args[]) {
 		Kiabora options = new Kiabora();
@@ -91,8 +79,6 @@ public class Kiabora {
 			System.exit(0);
 		}
 
-		initPropertyMap();
-
 		if (options.list_properties) {
 			printPropertiesList(propertyMap);
 			System.exit(0);
@@ -100,7 +86,6 @@ public class Kiabora {
 
 		// init parser
 		DlgpParser parser = null;
-		List<Rule> rules = new LinkedList<Rule>();
 
 		if (options.input_filepath.equals("-"))
 			parser = new DlgpParser(System.in);
@@ -116,17 +101,13 @@ public class Kiabora {
 		}
 
 		// parse rule set
-		while (parser.hasNext()) {
-			Object o = parser.next();
-			if (o instanceof Rule) {
-				Rule r = (Rule)o;
-				if (r.getLabel() == null || r.getLabel().equals(""))
-					r.setLabel("R" + currentRuleID++);
-				rules.add((Rule)o);
-			}
+		AnalyserRuleSet ruleset = null;
+		try {
+			ruleset = new AnalyserRuleSet(new RuleFilterIterator(parser));
+		} catch (RuleSetException e) {
+			System.err.println("An error occured when parsing rules: " + e.getMessage());
+			System.exit(1);
 		}
-
-		AnalyserRuleSet ruleset = new AnalyserRuleSet(rules);
 
 		if (options.with_unifiers)
 			ruleset.enableUnifiers(true);
@@ -425,38 +406,6 @@ public class Kiabora {
 		for (RuleSetProperty p : properties.values()) {
 			System.out.println(p.getLabel() + ": \t" + p.getFullName() + " - " + p.getDescription());
 		}
-	}
-
-	/**
-	 * Prepare the list of rule set properties.
-	 * If you have implemented a new rule set property, and you want
-	 * an easy way to test it, you are in the right place.
-	 * Just add a line that will add an instance of your new class,
-	 * compile, and everything will (should) work!
-	 */
-	public static void initPropertyMap() {
-		addToPropertyMap(AGRDProperty.instance());
-		addToPropertyMap(BTSProperty.instance());
-		addToPropertyMap(DisconnectedProperty.instance());
-		addToPropertyMap(DomainRestrictedProperty.instance());
-		addToPropertyMap(FESProperty.instance());
-		addToPropertyMap(FrontierGuardedProperty.instance());
-		addToPropertyMap(FrontierOneProperty.instance());
-		addToPropertyMap(FUSProperty.instance());
-		addToPropertyMap(GBTSProperty.instance());
-		addToPropertyMap(LinearProperty.instance());
-		addToPropertyMap(MFAProperty.instance());
-		addToPropertyMap(MSAProperty.instance());
-		addToPropertyMap(RangeRestrictedProperty.instance());
-		addToPropertyMap(StickyProperty.instance());
-		addToPropertyMap(WeaklyAcyclicProperty.instance());
-		addToPropertyMap(WeaklyFrontierGuardedSetProperty.instance());
-		addToPropertyMap(WeaklyGuardedSetProperty.instance());
-		addToPropertyMap(WeaklyStickyProperty.instance());
-	}
-
-	private static void addToPropertyMap(RuleSetProperty p) {
-		propertyMap.put(p.getLabel(), p);
 	}
 
 	@Parameter(names = { "-f", "--input-file" },
