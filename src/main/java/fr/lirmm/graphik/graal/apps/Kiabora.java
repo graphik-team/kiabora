@@ -137,6 +137,12 @@ public class Kiabora {
 		if (options.with_unifiers)
 			ruleset.enableUnifiers(true);
 
+		if (options.restricted_grd) {
+			ruleset.removeDependencyChecker(ProductivityChecker.instance());
+			ruleset.addDependencyChecker(RestrictedProductivityChecker.instance());
+		}
+		
+
 		// set up analyser
 		Map<String, RuleSetProperty> properties = new TreeMap<String, RuleSetProperty>();
 		for (String label : options.ruleset_properties) {
@@ -486,6 +492,9 @@ public class Kiabora {
 	@Parameter(names = { "-u", "--unifiers" },
 	           description = "Compute all unifiers between rules in order to print them in the GRD.")
 	private boolean with_unifiers = false;
+	
+	@Parameter(names = { "--restricted-grd"}, description = "filter some dependencies in the GRD that is not productive in a restricted chase algorithm.")
+	private boolean restricted_grd = false;
 
 	@Parameter(names = { "-h", "--help" },
 	           description = "Print this message.")
