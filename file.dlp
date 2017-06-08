@@ -1,6 +1,0 @@
-p(X,Z) :- p(X,Y), p(Y,Z).
-p(Y,X), q(X,Y,X) :- p(X,Y).
-q(X,Z,T) :- r(X,Y).
-r(Z,T) :- q(X,Y,Z).
-s(Z,Z,Z) :- p(X,X), r(Y,U), s(T,Y,X).
-s(Z,X,Y) :- s(X,X,X), s(Y,Y,Y).
