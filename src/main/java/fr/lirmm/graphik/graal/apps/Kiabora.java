@@ -84,6 +84,31 @@ public class Kiabora {
 			System.exit(0);
 		}
 
+		if (options.alias) {
+			List<String> newArgs = new ArrayList<String>();
+			for (String s : args) {
+				newArgs.add(s);
+			}
+			newArgs.add("-c");
+			newArgs.add("-b");
+			newArgs.add("-g");
+			newArgs.add("-p");
+			newArgs.add("*");
+			newArgs.add("-P");
+			newArgs.add("-r");
+			newArgs.add("-R");
+			newArgs.add("-s");
+			newArgs.add("-G");
+			newArgs.add("-S");
+			newArgs.add("-u");
+			try {
+				commander = new JCommander(options, newArgs.toArray(new String[newArgs.size()]));
+			} catch (com.beust.jcommander.ParameterException e) {
+				System.err.println(e.getMessage());
+				System.exit(1);
+			}
+		}
+
 		// init parser
 		DlgpParser parser = null;
 
@@ -468,6 +493,9 @@ public class Kiabora {
 
 	@Parameter(names = { "-V", "--version" }, description = "Print version information")
 	private boolean version = false;
+
+	@Parameter(names = { "-a" }, description = "Alias for -c -b -g -p '*' -P -r -R -s -G -S -u.")
+	private boolean alias = false;
 
 };
 
