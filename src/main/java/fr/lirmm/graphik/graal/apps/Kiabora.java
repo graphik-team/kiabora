@@ -15,7 +15,6 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import fr.lirmm.graphik.graal.api.core.Rule;
-import fr.lirmm.graphik.graal.grd.GraphOfRuleDependencies;
 import fr.lirmm.graphik.graal.io.dlp.DlgpParser;
 import fr.lirmm.graphik.graal.io.dlp.DlgpWriter;
 import fr.lirmm.graphik.graal.rulesetanalyser.Analyser;
@@ -130,10 +129,6 @@ public class Kiabora {
 
 		if (options.with_unifiers)
 			ruleset.enableUnifiers(true);
-
-		if (options.fast_unification)
-			ruleset.setDependencyChecker(GraphOfRuleDependencies.DependencyChecker.DEFAULT);
-
 
 		// set up analyser
 		Map<String,RuleSetProperty> properties = new TreeMap<String,RuleSetProperty>();
@@ -512,10 +507,6 @@ public class Kiabora {
 	@Parameter(names = { "-u", "--unifiers" },
 	           description = "Compute all unifiers between rules in order to print them in the GRD.")
 	private boolean with_unifiers = false;
-
-	@Parameter(names = { "-U", "--fast-unification" },
-	           description = "Enable a faster unification, Kiabora may detect dependencies where there is none.")
-	private boolean fast_unification = false;
 
 	@Parameter(names = { "-h", "--help" },
 	           description = "Print this message.")
