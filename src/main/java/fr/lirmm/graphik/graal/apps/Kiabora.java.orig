@@ -56,6 +56,8 @@ public class Kiabora {
 	public static final String PROGRAM_NAME = "kiabora";
 	public static final Map<String, RuleSetProperty> propertyMap = RuleSetPropertyHierarchy.generatePropertyMap();
 
+	private static long currentRuleID = 0;
+
 	public static void main(String args[]) {
 		Kiabora options = new Kiabora();
 
@@ -111,6 +113,7 @@ public class Kiabora {
 
 		// init parser
 		DlgpParser parser = null;
+		List<Rule> rules = new LinkedList<Rule>();
 
 		if (options.input_filepath.equals("-"))
 			parser = new DlgpParser(System.in);
@@ -161,7 +164,6 @@ public class Kiabora {
 		analyser.setProperties(hierarchy);
 		analyser.setRuleSet(ruleset);
 
-
 		if (options.print_ruleset) {
 			System.out.println("====== RULE SET ======");
 			printRuleSet(ruleset);
@@ -185,12 +187,10 @@ public class Kiabora {
 			printSCCGraph(ruleset);
 			System.out.println("");
 		}
-
-		if (options.print_ppg) {
-			System.out.println("===== PP GRAPH ======");
-			printPPGraph(ruleset);
-			System.out.println("");
-		}
+		
+		/*System.out.println("===== PP GRAPH ======");
+		printPPGraph(ruleset);
+		System.out.println("");*/
 
 		if (options.print_rule_pties) {
 			System.out.println("== RULE PROPERTIES ===");
@@ -463,69 +463,66 @@ public class Kiabora {
 		}
 	}
 
+<<<<<<< Updated upstream
 	@Parameter(names = { "-f", "--input-file" },
 	           description = "Rule set input file (use '-' for stdin).")
+=======
+	@Parameter(names = { "-f", "--input-file" }, description = "Rule set input file (use '-' for stdin).")
+>>>>>>> Stashed changes
 	private String input_filepath = "-";
 
-	@Parameter(names = { "-p", "--properties" },
-	           description = "Select which properties must be checked (example: 'lin,agrd,s,fus' or '*' to select all)."
-	             + " See --list-properties for a list of available properties.",
-	           variableArity = true)
+	@Parameter(names = { "-p",
+	                     "--properties" }, description = "Select which properties must be checked (example: 'lin,agrd,s,fus' or '*' to select all)."
+	                                                     + " See --list-properties for a list of available properties.", variableArity = true)
 	private List<String> ruleset_properties = new LinkedList<String>();
 
-	@Parameter(names = { "-l", "--list-properties" }, 
-			   description = "Print the available rule set properties.")
+	@Parameter(names = { "-l", "--list-properties" }, description = "Print the available rule set properties.")
 	private boolean list_properties = false;
 
-	@Parameter(names = { "-g", "--grd" },
-	           description = "Print the Graph of Rule Dependencies.")
+	@Parameter(names = { "-g", "--grd" }, description = "Print the Graph of Rule Dependencies.")
 	private boolean print_grd = false;
 
-	@Parameter(names = { "-s", "--scc" },
-	           description = "Print the GRD Strongly Connected Components.")
+	@Parameter(names = { "-s", "--scc" }, description = "Print the GRD Strongly Connected Components.")
 	private boolean print_scc = false;
 
-	@Parameter(names = { "-G", "--scc-graph" },
-	           description = "Print the graph of the GRD Strongly Connected Components.")
+	@Parameter(names = { "-G",
+	                     "--scc-graph" }, description = "Print the graph of the GRD Strongly Connected Components.")
 	private boolean print_sccg = false;
-	
-	@Parameter(names = { "--ppg-graph" },
-	           description = "Print the predicate position graph.")
-	private boolean print_ppg = false;
 
-	@Parameter(names = { "-r", "--rule-set" },
-	           description = "Print the rule set (can be useful if some rules were not labelled in the input file).")
+	@Parameter(names = { "-r",
+	                     "--rule-set" }, description = "Print the rule set (can be useful if some rules were not labelled in the input file).")
 	private boolean print_ruleset = false;
 
-	@Parameter(names = { "-P", "--rule-properties" }, 
-	           description = "Print properties for each rule.")
+	@Parameter(names = { "-P", "--rule-properties" }, description = "Print properties for each rule.")
 	private boolean print_rule_pties = false;
 
-	@Parameter(names = { "-S", "--scc-properties" },
-	           description = "Print properties for each GRD SCC.")
+	@Parameter(names = { "-S", "--scc-properties" }, description = "Print properties for each GRD SCC.")
 	private boolean print_scc_pties = false;
 
-	@Parameter(names = { "-R", "--ruleset-properties" },
-	           description = "Print properties for the whole rule set.")
+	@Parameter(names = { "-R", "--ruleset-properties" }, description = "Print properties for the whole rule set.")
 	private boolean print_pties = false;
 
-	@Parameter(names = { "-c", "--combine-fes" },
-	           description = "Combine GRD connected components in attempt to find some decidable combination while maximizing the forward chaining (chase).")
+	@Parameter(names = { "-c",
+	                     "--combine-fes" }, description = "Combine GRD connected components in attempt to find some decidable combination while maximizing the forward chaining (chase).")
 	private boolean combine_fes = false;
 
-	@Parameter(names = { "-b", "--combine-fus" },
-	           description = "Combine GRD connected components in attempt to find some decidable combination while maximizing the backward chaining (query rewriting).")
+	@Parameter(names = { "-b",
+	                     "--combine-fus" }, description = "Combine GRD connected components in attempt to find some decidable combination while maximizing the backward chaining (query rewriting).")
 	private boolean combine_fus = false;
 
-	@Parameter(names = { "-u", "--unifiers" },
-	           description = "Compute all unifiers between rules in order to print them in the GRD.")
+	@Parameter(names = { "-u",
+	                     "--unifiers" }, description = "Compute all unifiers between rules in order to print them in the GRD.")
 	private boolean with_unifiers = false;
 	
-	@Parameter(names = { "--restricted-grd"}, description = "filter some dependencies in the GRD that is not productive in a restricted chase algorithm.")
+	@Parameter(names = { "--restricted-grd"}, description = "filter some dependencies in the GRD that is not productive in a restricted chase algorithm. This option is not compatible with --fast-unification")
 	private boolean restricted_grd = false;
 
+<<<<<<< Updated upstream
 	@Parameter(names = { "-h", "--help" },
 	           description = "Print this message.")
+=======
+	@Parameter(names = { "-h", "--help" }, description = "Print this message.")
+>>>>>>> Stashed changes
 	private boolean help = false;
 
 	@Parameter(names = { "-V", "--version" }, description = "Print version information")
@@ -533,6 +530,10 @@ public class Kiabora {
 
 	@Parameter(names = { "-a" }, description = "Alias for -c -b -g -p '*' -P -r -R -s -G -S -u.")
 	private boolean alias = false;
+<<<<<<< Updated upstream
 
 };
+=======
+>>>>>>> Stashed changes
 
+};
