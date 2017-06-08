@@ -480,7 +480,7 @@ public class Kiabora {
 	           description = "Select which properties must be checked (example: 'lin,agrd,s,fus' or '*' to select all)."
 	             + " See --list-properties for a list of available properties.",
 	           variableArity = true)
-	private List<String> ruleset_properties = new LinkedList<String>();
+	private List<String> ruleset_properties = new LinkedList<String>(propertyMap.keySet());
 
 	@Parameter(names = { "-l", "--list-properties" }, 
 			   description = "Print the available rule set properties.")
