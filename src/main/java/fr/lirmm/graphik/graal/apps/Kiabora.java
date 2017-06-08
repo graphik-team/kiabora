@@ -297,7 +297,7 @@ public class Kiabora {
 			} else {
 				out.print(" -> ");
 			}
-			out.print(ppg.getEdgeTarget(e));
+			out.println(ppg.getEdgeTarget(e));
 		}
 	}
 
